@@ -19,8 +19,10 @@ public class ShipDaoImp implements Shipdao{
             connection = ConnectionConfiguration.getConnection();
             statement = connection.createStatement();
             statement.execute("CREATE TABLE IF NOT EXISTS ship(id int primary key unique auto_increment," +
-                    "berth_number varchar(60), bollard_number varchar(60), name varchar(60), ETA timestamp, ETD timestamp, " +
-                    "last_port varchar(60), next_port varchar(60))");
+                    "vessel_name varchar(60), voyage_no varchar(60), nationality varchar(60), GRT float, LOA float," +
+                    "last_port varchar(60), next_port varchar(60), berth_pref varchar(60), master varchar(60), NRT float, DWT float," +
+                    "beam float, ETA timestamp, ETD timestamp, draft_fwd float, draft_aft float, berth_post varchar(60), " +
+                    "bollard varchar(60), remarks mediumtext, filled varchar(60))");
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -49,18 +51,30 @@ public class ShipDaoImp implements Shipdao{
 
         try {
             connection = ConnectionConfiguration.getConnection();
-            preparedStatement = connection.prepareStatement("INSERT INTO ship (berth_number, bollard_number, " +
-                    "name, ETA, ETD, last_port, next_port)" + "VALUES (?, ?, ?, ?, ?, ?, ?)");
-            preparedStatement.setString(1, ship.getBerthNumber());
-            preparedStatement.setString(2, ship.getBollardNumber());
-            preparedStatement.setString(3, ship.getName());
-            preparedStatement.setTimestamp(4, ship.getETA());
-            preparedStatement.setTimestamp(5, ship.getETD());
-            preparedStatement.setString(6, ship.getLastPort());
-            preparedStatement.setString(7, ship.getNextPort());
+            preparedStatement = connection.prepareStatement("INSERT INTO ship (vessel_name, voyage_no, nationality, GRT, " +
+                    "LOA, last_port, next_port, berth_pref, master, NRT, DWT, beam, ETA, ETD, draft_fwd, draft_aft, berth_post," +
+                    "bollard, remarks, filled)" + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            preparedStatement.setString(1, ship.getVessel_name());
+            preparedStatement.setString(2, ship.getVoyage_num());
+            preparedStatement.setString(3, ship.getNationality());
+            preparedStatement.setFloat(4, ship.getGRT());
+            preparedStatement.setFloat(5, ship.getLOA());
+            preparedStatement.setString(6, ship.getLast_port());
+            preparedStatement.setString(7, ship.getNext_port());
+            preparedStatement.setString(8, ship.getBerth_pref());
+            preparedStatement.setString(9, ship.getMaster());
+            preparedStatement.setFloat(10, ship.getNRT());
+            preparedStatement.setFloat(11, ship.getDWT());
+            preparedStatement.setFloat(12, ship.getBeam());
+            preparedStatement.setTimestamp(13, ship.getETA());
+            preparedStatement.setTimestamp(14, ship.getETD());
+            preparedStatement.setFloat(15, ship.getDraft_fwd());
+            preparedStatement.setFloat(16, ship.getDraft_aft());
+            preparedStatement.setString(17, ship.getBerth_post());
+            preparedStatement.setString(18, ship.getBollard());
+            preparedStatement.setString(19, ship.getRemarks());
+            preparedStatement.setString(20, ship.getFilled());
             preparedStatement.execute();
-            System.out.println("INSERT INTO ship (berth_number, bollard_number, " +
-                    "name, ETA, ETD, last_port, next_port)" + "VALUES (?, ?, ?, ?, ?, ?, ?)");
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -96,14 +110,26 @@ public class ShipDaoImp implements Shipdao{
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                ship.setId(resultSet.getInt("id"));
-                ship.setBerthNumber(resultSet.getString("berth_number"));
-                ship.setBollardNumber(resultSet.getString("bollard_number"));
-                ship.setName(resultSet.getString("name"));
+                ship.setVessel_name(resultSet.getString("vessel_name"));
+                ship.setVoyage_num(resultSet.getString("voyage_no"));
+                ship.setNationality(resultSet.getString("nationality"));
+                ship.setGRT(resultSet.getFloat("GRT"));
+                ship.setLOA(resultSet.getFloat("LOA"));
+                ship.setLast_port(resultSet.getString("last_port"));
+                ship.setNext_port(resultSet.getString("next_port"));
+                ship.setBerth_pref(resultSet.getString("berth_pref"));
+                ship.setMaster(resultSet.getString("master"));
+                ship.setNRT(resultSet.getFloat("NRT"));
+                ship.setDWT(resultSet.getFloat("DWT"));
+                ship.setBeam(resultSet.getFloat("beam"));
                 ship.setETA(resultSet.getTimestamp("ETA"));
                 ship.setETD(resultSet.getTimestamp("ETD"));
-                ship.setLastPort(resultSet.getString("last_port"));
-                ship.setNextPort(resultSet.getString("next_port"));
+                ship.setDraft_fwd(resultSet.getFloat("draft_fwd"));
+                ship.setDraft_aft(resultSet.getFloat("draft_aft"));
+                ship.setBerth_post(resultSet.getString("berth_post"));
+                ship.setBollard(resultSet.getString("bollard"));
+                ship.setRemarks(resultSet.getString("remarks"));
+                ship.setFilled(resultSet.getString("filled"));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -131,8 +157,6 @@ public class ShipDaoImp implements Shipdao{
                 }
             }
         }
-
-
         return ship;
     }
 
@@ -150,15 +174,26 @@ public class ShipDaoImp implements Shipdao{
 
             while (resultSet.next()) {
                 Ship ship = new Ship();
-                ship.setId(resultSet.getInt("id"));
-                ship.setBerthNumber(resultSet.getString("berth_number"));
-                ship.setBollardNumber(resultSet.getString("bollard_number"));
-                ship.setName(resultSet.getString("name"));
+                ship.setVessel_name(resultSet.getString("vessel_name"));
+                ship.setVoyage_num(resultSet.getString("voyage_no"));
+                ship.setNationality(resultSet.getString("nationality"));
+                ship.setGRT(resultSet.getFloat("GRT"));
+                ship.setLOA(resultSet.getFloat("LOA"));
+                ship.setLast_port(resultSet.getString("last_port"));
+                ship.setNext_port(resultSet.getString("next_port"));
+                ship.setBerth_pref(resultSet.getString("berth_pref"));
+                ship.setMaster(resultSet.getString("master"));
+                ship.setNRT(resultSet.getFloat("NRT"));
+                ship.setDWT(resultSet.getFloat("DWT"));
+                ship.setBeam(resultSet.getFloat("beam"));
                 ship.setETA(resultSet.getTimestamp("ETA"));
                 ship.setETD(resultSet.getTimestamp("ETD"));
-                ship.setLastPort(resultSet.getString("last_port"));
-                ship.setNextPort(resultSet.getString("next_port"));
-
+                ship.setDraft_fwd(resultSet.getFloat("draft_fwd"));
+                ship.setDraft_aft(resultSet.getFloat("draft_aft"));
+                ship.setBerth_post(resultSet.getString("berth_post"));
+                ship.setBollard(resultSet.getString("bollard"));
+                ship.setRemarks(resultSet.getString("remarks"));
+                ship.setFilled(resultSet.getString("filled"));
                 ships.add(ship);
             }
         }catch (Exception e){
@@ -207,13 +242,10 @@ public class ShipDaoImp implements Shipdao{
             while (resultSet.next()) {
                 Ship ship = new Ship();
                 ship.setId(resultSet.getInt("id"));
-                ship.setBerthNumber(resultSet.getString("berth_number"));
-                ship.setBollardNumber(resultSet.getString("bollard_number"));
-                ship.setName(resultSet.getString("name"));
                 ship.setETA(resultSet.getTimestamp("ETA"));
                 ship.setETD(resultSet.getTimestamp("ETD"));
-                ship.setLastPort(resultSet.getString("last_port"));
-                ship.setNextPort(resultSet.getString("next_port"));
+                ship.setLast_port(resultSet.getString("last_port"));
+                ship.setNext_port(resultSet.getString("next_port"));
 
                 ships.add(ship);
             }
@@ -265,13 +297,10 @@ public class ShipDaoImp implements Shipdao{
             while (resultSet.next()) {
                 Ship ship = new Ship();
                 ship.setId(resultSet.getInt("id"));
-                ship.setBerthNumber(resultSet.getString("berth_number"));
-                ship.setBollardNumber(resultSet.getString("bollard_number"));
-                ship.setName(resultSet.getString("name"));
                 ship.setETA(resultSet.getTimestamp("ETA"));
                 ship.setETD(resultSet.getTimestamp("ETD"));
-                ship.setLastPort(resultSet.getString("last_port"));
-                ship.setNextPort(resultSet.getString("next_port"));
+                ship.setLast_port(resultSet.getString("last_port"));
+                ship.setNext_port(resultSet.getString("next_port"));
 
                 ships.add(ship);
             }
@@ -344,7 +373,7 @@ public class ShipDaoImp implements Shipdao{
     public void update(Ship ship, int id) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-
+    /*
         try {
             connection = ConnectionConfiguration.getConnection();
             preparedStatement = connection.prepareStatement("UPDATE ship SET " +
@@ -380,6 +409,6 @@ public class ShipDaoImp implements Shipdao{
                     e.printStackTrace();
                 }
             }
-        }
+        }*/
     }
 }
