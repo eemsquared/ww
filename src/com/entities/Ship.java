@@ -7,7 +7,7 @@ public class Ship {
     private String vessel_name;
     private String voyage_num;
     private String nationality;
-    private float GRT;
+    private Float GRT;
     private Float LOA;
     private String last_port;
     private String next_port;
